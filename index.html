@@ -2,74 +2,67 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>DoodhDaily - Mobile Milk Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>DoodhDaily - Smart Milk Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#007bff">
+  <meta name="theme-color" content="#2196f3">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
+
 <body>
   <div class="container">
-    <!-- Header with settings button -->
+    <!-- Enhanced Header -->
     <header class="app-header">
       <h1 class="app-title">
         <div><img class="img" src="Title.png" alt="DoodhDaily logo"></div>
       </h1>
       <p class="app-subtitle">Keep Count, Stay Calm — Milk Tracking Made Easy</p>
       <div class="top-actions">
-        <button id="theme-toggle" aria-label="Toggle Theme" title="Change Theme">🌙</button>
-        <button id="today-btn" aria-label="Go to Today" title="Go to Today">📅</button>
-        <button id="settings-btn" aria-label="Reminder Settings" title="Reminder Settings">⚙️</button>
-        <button id="calculator-open" aria-label="Open Calculator" title="Milk Calculator">₹</button>
+        <button id="theme-toggle" class="action-btn" title="Change Theme">
+          <span class="btn-icon">🌙</span>
+          <span class="btn-label">Theme</span>
+        </button>
+        <button id="today-btn" class="action-btn" title="Go to Today">
+          <span class="btn-icon">📅</span>
+          <span class="btn-label">Today</span>
+        </button>
+        <button id="settings-btn" class="action-btn" title="Settings">
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-label">Settings</span>
+        </button>
+        <button id="calculator-open" class="action-btn" title="Calculator">
+          <span class="btn-icon">₹</span>
+          <span class="btn-label">Calculate</span>
+        </button>
       </div>
     </header>
 
-    <!-- Reminder Settings Modal -->
-    <div id="settings-modal" class="modal-overlay hidden">
-      <div class="modal-content settings-modal">
-        <h3>🔔 Reminder Settings</h3>
-        
-        <div class="form-group">
-          <label for="reminder-enabled">Enable Daily Reminders:</label>
-          <input type="checkbox" id="reminder-enabled" />
-        </div>
-        
-        <div class="form-group">
-          <label for="reminder-time">Daily Reminder Time:</label>
-          <input type="time" id="reminder-time" value="08:00" />
-        </div>
-        
-        <div class="form-group">
-          <label for="snooze-interval">Snooze Interval (minutes):</label>
-          <select id="snooze-interval">
-            <option value="15">15 minutes</option>
-            <option value="30" selected>30 minutes</option>
-            <option value="60">1 hour</option>
-            <option value="120">2 hours</option>
-          </select>
-        </div>
-        
-        <div class="modal-actions">
-          <button id="save-settings" class="btn btn--primary">Save Settings</button>
-          <button id="close-settings" class="btn btn--outline">Close</button>
+    <!-- Enhanced Install App Prompt -->
+    <div id="install-prompt" class="install-banner hidden">
+      <div class="install-content">
+        <h4>📱 Install DoodhDaily App</h4>
+        <p>Add to your home screen for the best experience with reliable notifications!</p>
+        <div class="install-actions">
+          <button id="install-btn" class="btn btn--primary">📲 Install Now</button>
+          <button id="dismiss-install" class="btn btn--outline">Later</button>
         </div>
       </div>
     </div>
 
-    <!-- Month Navigation -->
+    <!-- Enhanced Navigation -->
     <div class="month-navigation">
-      <button id="prevMonth" class="nav-btn" aria-label="Previous Month">‹</button>
-      <div class="month-year-display">
-        <span id="currentMonthYear" tabindex="0" role="button" aria-label="Select Month and Year"></span>
+      <button id="prevMonth" class="nav-btn" title="Previous Month">‹</button>
+      <div class="month-year-container">
+        <span id="currentMonthYear" class="month-year-display" role="button" tabindex="0">January 2025</span>
       </div>
-      <button id="nextMonth" class="nav-btn" aria-label="Next Month">›</button>
+      <button id="nextMonth" class="nav-btn" title="Next Month">›</button>
     </div>
 
     <!-- Calendar Section -->
     <section class="calendar-section">
       <div class="calendar-container">
-        <!-- Days of Week -->
         <div class="calendar-header">
           <div class="day-label">Sun</div>
           <div class="day-label">Mon</div>
@@ -79,104 +72,187 @@
           <div class="day-label">Fri</div>
           <div class="day-label">Sat</div>
         </div>
-        <!-- Dynamic Calendar -->
         <div id="calendarGrid" class="calendar-grid"></div>
       </div>
     </section>
 
-    <!-- Enhanced Cost Calculator Section -->
+    <!-- Enhanced Calculator -->
     <section id="calculator" class="calculator hidden">
       <h2>💰 Milk Cost Calculator</h2>
+      
       <div class="calculator-form">
         <div class="form-group">
           <label for="price-1l">Price per 1L (₹):</label>
           <input type="number" id="price-1l" placeholder="60" min="0" step="0.01" />
         </div>
-        
+
         <div class="form-group">
           <label for="price-05l">Price per 0.5L (₹):</label>
           <input type="number" id="price-05l" placeholder="30" min="0" step="0.01" />
         </div>
-        
+
         <div class="form-group">
-          <label for="quantity">Default Quantity per Day:</label>
+          <label for="quantity">Daily Quantity:</label>
           <select id="quantity">
             <option value="1">1 Litre</option>
             <option value="0.5">0.5 Litre</option>
           </select>
         </div>
 
-        <!-- Multi-Year Month Selector -->
+        <!-- Enhanced Month Selector -->
         <div class="month-selector-section">
-          <h3>Select Months for Calculation</h3>
+          <h3>📅 Select Months for Calculation</h3>
+          
+          <!-- Year Navigation -->
           <div class="year-navigation">
-            <button id="year-prev" class="year-nav-btn">‹</button>
-            <span id="current-year" class="year-display"></span>
-            <button id="year-next" class="year-nav-btn">›</button>
+            <button id="year-prev" class="year-nav-btn" title="Previous Year">‹</button>
+            <span id="current-year" class="year-display">2025</span>
+            <button id="year-next" class="year-nav-btn" title="Next Year">›</button>
           </div>
-          
+
+          <!-- Select All/Clear All Controls -->
           <div class="selection-controls">
-            <button id="select-all-months" class="control-btn">Select All</button>
-            <button id="clear-all-months" class="control-btn">Clear All</button>
+            <button id="select-all-months" class="control-btn">✓ Select All</button>
+            <button id="clear-all-months" class="control-btn">✗ Clear All</button>
           </div>
-          
+
+          <!-- Months Grid -->
           <div id="months-grid" class="months-grid"></div>
-          
-          <div id="selected-summary" class="selected-summary">
+
+          <!-- Selection Summary -->
+          <div class="selected-summary">
             <strong>Selected:</strong> <span id="summary-text">None</span>
           </div>
         </div>
-        
-        <button id="calculate-btn" class="btn btn--primary">Calculate Total Cost</button>
+
+        <button id="calculate-btn" class="btn btn--primary calculate-button">
+          <span class="btn-icon">🧮</span>
+          Calculate Total Cost
+        </button>
       </div>
-      
+
+      <!-- Results Section -->
       <div id="calc-results" class="results hidden">
         <h3>📋 Calculation Results</h3>
-        <div class="result-item">
-          <span class="result-label">Milk purchase days:</span>
-          <span id="total-days" class="result-value">0</span>
+        <div class="result-grid">
+          <div class="result-item">
+            <span class="result-label">🗓️ Milk Days:</span>
+            <span id="total-days" class="result-value">0</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">🥛 Total Quantity:</span>
+            <span id="total-quantity" class="result-value">0 L</span>
+          </div>
+          <div class="result-item highlight">
+            <span class="result-label">💰 Total Cost:</span>
+            <span id="total-cost" class="result-value">₹0.00</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">📈 Current Streak:</span>
+            <span id="current-streak" class="result-value">0 days</span>
+          </div>
         </div>
-        <div class="result-item">
-          <span class="result-label">Total quantity:</span>
-          <span id="total-quantity" class="result-value">0 L</span>
-        </div>
-        <div class="result-item">
-          <span class="result-label">Estimated cost:</span>
-          <span id="total-cost" class="result-value clickable" title="Click to scroll to details">₹0.00</span>
-        </div>
+        
+        <!-- Print Button -->
+        <button id="print-btn" class="btn btn--outline print-button">
+          <span class="btn-icon">🖨️</span>
+          Print Results
+        </button>
       </div>
     </section>
 
-    <!-- Month/Year Picker Modal -->
-    <div id="picker-overlay" class="modal-overlay hidden">
-      <div class="modal-content">
-        <h3>Select Month & Year</h3>
-        <div class="year-selector">
-          <button id="picker-prev-year" aria-label="Previous Year">‹</button>
-          <span id="picker-year" class="year-display"></span>
-          <button id="picker-next-year" aria-label="Next Year">›</button>
+    <!-- Enhanced Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+      <div class="modal-content settings-modal">
+        <h3>🔔 Daily Milk Reminders</h3>
+        
+        <!-- Local notification status -->
+        <div id="notification-status" class="status-indicator">
+          <span id="notification-icon">⏳</span> 
+          <span id="notification-text">Checking notification support...</span>
         </div>
-        <div id="picker-months" class="month-grid"></div>
-        <button id="picker-close" class="btn btn--outline">Close</button>
-      </div>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal-overlay" style="display: none;">
-      <div class="modal-content">
-        <h3 id="modalTitle" class="modal-title">Confirm Action</h3>
-        <p id="modalMessage" class="modal-message"></p>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="reminder-enabled">
+            <span class="checkbox-text">Enable daily milk reminders at 12:00 PM</span>
+          </label>
+        </div>
+
+        <div class="settings-info">
+          <p>📱 <strong>Local Notifications:</strong> Reminders work completely offline using your browser.</p>
+          <p>⏰ <strong>Fixed Time:</strong> Daily reminders at 12:00 PM for consistency.</p>
+          <p>🔧 <strong>Install Tip:</strong> Install the app for best notification reliability.</p>
+        </div>
+
         <div class="modal-actions">
-          <button id="modalYes" class="btn btn--primary">Yes</button>
-          <button id="modalNo" class="btn btn--outline">No</button>
+          <button id="save-settings" class="btn btn--primary">Save Settings</button>
+          <button id="close-settings" class="btn btn--outline">Close</button>
         </div>
       </div>
     </div>
 
-    <!-- Holiday Info Modal -->
+    <!-- Enhanced Month/Year Picker Modal -->
+    <div id="picker-overlay" class="modal-overlay hidden">
+      <div class="modal-content picker-modal">
+        <h3>📅 Select Month & Year</h3>
+        
+        <!-- Year Selector -->
+        <div class="year-selector">
+          <button id="picker-prev-year" class="nav-btn">‹</button>
+          <span id="picker-year" class="year-display">2025</span>
+          <button id="picker-next-year" class="nav-btn">›</button>
+        </div>
+        
+        <!-- Month Grid -->
+        <div id="picker-months" class="month-picker-grid"></div>
+        
+        <div class="modal-actions">
+          <button id="picker-close" class="btn btn--outline">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Day Details Modal -->
+    <div id="day-modal" class="modal-overlay hidden">
+      <div class="modal-content day-modal">
+        <h3 id="day-modal-title">📅 Day Details</h3>
+        
+        <div class="day-modal-content">
+          <!-- Large milk purchase button for elderly users -->
+          <div class="milk-purchase-section">
+            <button id="milk-purchase-btn" class="btn btn--primary milk-purchase-button">
+              <span class="btn-icon">🥛</span>
+              <span id="milk-btn-text">Mark Milk Purchase This Day</span>
+            </button>
+            <p class="help-text">💡 Single tap to mark milk, double tap this button to add notes quickly!</p>
+          </div>
+          
+          <div class="notes-section">
+            <label for="day-notes">📝 Add Notes (Optional):</label>
+            <textarea id="day-notes" placeholder="e.g., Paid ₹300, No delivery - festival, bought 2L today, etc." rows="3"></textarea>
+          </div>
+
+          <!-- Holiday info if applicable -->
+          <div id="holiday-info" class="holiday-info hidden">
+            <div class="holiday-badge">
+              <span class="holiday-icon">🎉</span>
+              <span id="holiday-name">Holiday Name</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button id="save-day" class="btn btn--primary">Save Changes</button>
+          <button id="close-day-modal" class="btn btn--outline">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Holiday Modal -->
     <div id="holidayModal" class="modal-overlay hidden">
-      <div class="modal-content holiday-modal-content">
-        <h3 id="holidayTitle">🎉 Festival Information</h3>
+      <div class="modal-content holiday-modal">
+        <h3 id="holidayTitle">🎉 Holiday Information</h3>
         <p id="holidayDescription"></p>
         <button id="holidayClose" class="btn btn--primary">Close</button>
       </div>
@@ -185,10 +261,7 @@
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
   </div>
-<button id="print-btn" class="btn btn--outline" title="Print or export">
-  🖨️ Print 
-</button>
-
+  
   <script src="app.js"></script>
 </body>
 </html>

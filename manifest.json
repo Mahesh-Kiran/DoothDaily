@@ -1,24 +1,58 @@
 {
-  "name": "DoodhDaily - Milk Purchase Tracker",
+  "name": "DoodhDaily - Smart Milk Tracker",
   "short_name": "DoodhDaily",
-  "description": "Track daily milk purchases with reminders for elderly users",
+  "description": "Senior-friendly milk tracking app with smart reminders and cost calculation",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#2196f3",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
-  "orientation": "portrait-primary",
+  "lang": "en",
+  "scope": "/",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512", 
-      "type": "image/png"
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "health", "lifestyle"],
-  "lang": "en"
+  "shortcuts": [
+    {
+      "name": "Mark Today's Milk",
+      "short_name": "Mark Today",
+      "description": "Quickly mark today as milk purchased",
+      "url": "/?action=mark-today",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Open Calculator",
+      "short_name": "Calculator",
+      "description": "Calculate monthly milk costs",
+      "url": "/?action=calculator",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    "productivity",
+    "utilities",
+    "lifestyle"
+  ],
+  "prefer_related_applications": false
 }
