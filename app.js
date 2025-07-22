@@ -60,23 +60,19 @@ class DoodhDaily {
   // Initialize local notification system
   async initLocalNotifications() {
     try {
-      // Request notification permission
       const permission = await Notification.requestPermission();
       
       if (permission === 'granted') {
         this.updateNotificationStatus('granted', '✅ Notifications enabled');
         
-        // Register service worker for notifications
         if ('serviceWorker' in navigator) {
           const registration = await navigator.serviceWorker.register('/sw.js');
           console.log('Service Worker registered:', registration);
           
-          // Listen for service worker messages
           navigator.serviceWorker.addEventListener('message', (event) => {
             this.handleServiceWorkerMessage(event.data);
           });
           
-          // Schedule initial notification if enabled
           if (this.notificationSettings.enabled) {
             this.scheduleNextNotification();
           }
@@ -90,7 +86,6 @@ class DoodhDaily {
     }
   }
 
-  // Update notification status in UI
   updateNotificationStatus(status, message) {
     const statusEl = document.getElementById('notification-status');
     const iconEl = document.getElementById('notification-icon');
@@ -122,17 +117,14 @@ class DoodhDaily {
     }
   }
 
-  // Schedule next daily notification at 12:00 PM
   scheduleNextNotification() {
     if (!this.notificationSettings.enabled) return;
 
     const now = new Date();
     const nextNotification = new Date();
     
-    // Set to 12:00 PM today
     nextNotification.setHours(12, 0, 0, 0);
     
-    // If it's already past 12 PM today, schedule for tomorrow
     if (nextNotification <= now) {
       nextNotification.setDate(nextNotification.getDate() + 1);
     }
@@ -140,20 +132,15 @@ class DoodhDaily {
     const timeUntilNext = nextNotification.getTime() - now.getTime();
     
     console.log(`Next notification scheduled for: ${nextNotification.toLocaleString()}`);
-    console.log(`Time until notification: ${Math.round(timeUntilNext / 1000 / 60)} minutes`);
 
-    // Schedule the notification
     setTimeout(() => {
       this.showDailyNotification();
-      // Schedule next day's notification
       this.scheduleNextNotification();
     }, timeUntilNext);
 
-    // Store the scheduled time
     localStorage.setItem('doodhdaily-next-notification', nextNotification.toISOString());
   }
 
-  // Show the daily notification using Service Worker
   async showDailyNotification() {
     try {
       const registration = await navigator.serviceWorker.ready;
@@ -179,7 +166,6 @@ class DoodhDaily {
     }
   }
 
-  // Handle messages from service worker
   handleServiceWorkerMessage(data) {
     if (data.type === 'notification-clicked') {
       console.log('Notification clicked, app opened');
@@ -187,16 +173,14 @@ class DoodhDaily {
     }
   }
 
-  // Load ALL holidays (not just Telugu)
   async loadAllHolidays(year, month) {
     const cacheKey = `all-holidays-${year}-${String(month + 1).padStart(2, '0')}`;
     const cached = localStorage.getItem(cacheKey);
 
-    // Check cache (2 months validity)
     if (cached) {
       try {
         const data = JSON.parse(cached);
-        if (Date.now() - data.timestamp < 60 * 24 * 60 * 60 * 1000) { // 2 months
+        if (Date.now() - data.timestamp < 60 * 24 * 60 * 60 * 1000) {
           if (!this.holidays[year]) this.holidays[year] = {};
           Object.assign(this.holidays[year], data.holidays);
           return;
@@ -234,12 +218,11 @@ class DoodhDaily {
     }
   }
 
-  // Map ALL holidays
   mapAllHolidays(holidays) {
     const mapped = {};
     holidays.forEach(holiday => {
       if (holiday && holiday.date && holiday.date.iso) {
-        const dateKey = holiday.date.iso.substring(5); // Get MM-DD format
+        const dateKey = holiday.date.iso.substring(5);
         mapped[dateKey] = holiday.name;
       }
     });
@@ -256,7 +239,6 @@ class DoodhDaily {
     return this.holidays[year][key] || null;
   }
 
-  // Toast notification system
   initToastContainer() {
     if (!document.getElementById('toast-container')) {
       const container = document.createElement('div');
@@ -283,7 +265,6 @@ class DoodhDaily {
     }, 4000);
   }
 
-  // Data persistence
   loadData() {
     try {
       const savedMarks = localStorage.getItem('doodhdaily-marks');
@@ -327,7 +308,6 @@ class DoodhDaily {
     }
   }
 
-  // Theme management
   restoreTheme() {
     const saved = localStorage.getItem('doodhdaily-theme') || 'light';
     document.documentElement.setAttribute('data-theme', saved);
@@ -353,7 +333,6 @@ class DoodhDaily {
     this.showToast(`Theme changed to ${next} mode`, 'success');
   }
 
-  // Enhanced calendar rendering
   async renderCalendar() {
     const grid = document.getElementById('calendarGrid');
     if (!grid) return;
@@ -362,7 +341,6 @@ class DoodhDaily {
     const year = this.displayDate.getFullYear();
     const month = this.displayDate.getMonth();
 
-    // Load holidays for current year if not already loaded
     if (!this.holidays[year]) {
       await this.loadAllHolidays(year, month);
     }
@@ -370,7 +348,6 @@ class DoodhDaily {
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
-    // Previous month trailing dates
     const prevMonth = new Date(year, month, 0);
     const prevLastDate = prevMonth.getDate();
 
@@ -380,13 +357,11 @@ class DoodhDaily {
       grid.appendChild(cell);
     }
 
-    // Current month dates
     for (let day = 1; day <= lastDate; day++) {
       const cell = this.createCalendarCell(day, false, year, month);
       grid.appendChild(cell);
     }
 
-    // Next month leading dates
     const totalCells = grid.children.length;
     const remainingCells = 42 - totalCells;
 
@@ -396,7 +371,6 @@ class DoodhDaily {
     }
   }
 
-  // Enhanced calendar cell creation with double-click support
   createCalendarCell(day, isOtherMonth, year = null, month = null) {
     const cell = document.createElement('div');
     cell.className = 'calendar-day';
@@ -422,7 +396,6 @@ class DoodhDaily {
       cell.setAttribute('data-holiday', holidayInfo);
     }
 
-    // Build cell content
     let cellContent = `<span class="day-number">${day}</span>`;
     if (isMarked) {
       cellContent += '<span class="milk-icon">🥛</span>';
@@ -436,7 +409,6 @@ class DoodhDaily {
     
     cell.innerHTML = cellContent;
 
-    // Enhanced click handler with double-click detection for elderly users
     let clickCount = 0;
     cell.addEventListener('click', (e) => {
       e.preventDefault();
@@ -445,7 +417,6 @@ class DoodhDaily {
       clickCount++;
       
       if (clickCount === 1) {
-        // Single click - normal day selection
         setTimeout(() => {
           if (clickCount === 1) {
             this.handleDayClick(year, month, day, dateStr, isMarked, holidayInfo);
@@ -453,13 +424,11 @@ class DoodhDaily {
           clickCount = 0;
         }, 300);
       } else if (clickCount === 2) {
-        // Double click - quick mark milk and show notes
         this.handleQuickMilkMark(year, month, day, dateStr, isMarked);
         clickCount = 0;
       }
     });
 
-    // Long press for holidays
     if (holidayInfo) {
       this.addLongPressListener(cell, holidayInfo);
     }
@@ -471,9 +440,7 @@ class DoodhDaily {
     return cell;
   }
 
-  // Quick milk mark for elderly users (double-click)
   handleQuickMilkMark(year, month, day, dateStr, isMarked) {
-    // Toggle milk status
     if (isMarked) {
       this.markedDates.delete(dateStr);
       this.showToast('❌ Milk purchase removed', 'info');
@@ -485,12 +452,10 @@ class DoodhDaily {
     this.saveData();
     this.renderCalendar();
     
-    // Auto-open day modal for notes after marking
     setTimeout(() => {
       this.currentDayData = { year, month, day, dateStr, isMarked: !isMarked, holidayInfo: this.getHolidayInfo(year, month, day) };
       this.showDayModal();
       
-      // Focus on notes field
       setTimeout(() => {
         const notesField = document.getElementById('day-notes');
         if (notesField) {
@@ -500,13 +465,11 @@ class DoodhDaily {
     }, 500);
   }
 
-  // Enhanced day click handling
   handleDayClick(year, month, day, dateStr, isMarked, holidayInfo = null) {
     this.currentDayData = { year, month, day, dateStr, isMarked, holidayInfo };
     this.showDayModal();
   }
 
-  // Enhanced day modal with double-click support for milk button
   showDayModal() {
     const modal = document.getElementById('day-modal');
     const title = document.getElementById('day-modal-title');
@@ -522,7 +485,6 @@ class DoodhDaily {
     
     title.textContent = `📅 ${day} ${this.months[month]} ${year}`;
     
-    // Update milk button
     if (isMarked) {
       milkBtn.classList.add('marked');
       milkBtnText.textContent = '✅ Milk Purchased This Day (Tap to Remove)';
@@ -531,10 +493,8 @@ class DoodhDaily {
       milkBtnText.textContent = '🥛 Mark Milk Purchase This Day';
     }
     
-    // Load existing notes
     notesField.value = this.dayNotes.get(dateStr) || '';
 
-    // Show holiday info if applicable
     if (holiday) {
       holidayInfo.classList.remove('hidden');
       holidayName.textContent = holiday;
@@ -545,7 +505,6 @@ class DoodhDaily {
     modal.classList.remove('hidden');
   }
 
-  // Enhanced milk button with double-click support
   toggleMilkPurchase() {
     if (!this.currentDayData) return;
 
@@ -577,7 +536,6 @@ class DoodhDaily {
     const { dateStr } = this.currentDayData;
     const notesField = document.getElementById('day-notes');
 
-    // Save notes
     const notes = notesField.value.trim();
     if (notes) {
       this.dayNotes.set(dateStr, notes);
@@ -598,7 +556,6 @@ class DoodhDaily {
     this.currentDayData = null;
   }
 
-  // Long press listener for holidays
   addLongPressListener(element, holidayInfo) {
     let pressTimer;
     let isLongPress = false;
@@ -637,7 +594,6 @@ class DoodhDaily {
     if (modal) modal.classList.remove('hidden');
   }
 
-  // Date utilities
   formatDate(year, month, day) {
     return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   }
@@ -656,7 +612,6 @@ class DoodhDaily {
     }
   }
 
-  // Navigation
   async goToPreviousMonth() {
     this.displayDate.setMonth(this.displayDate.getMonth() - 1);
     const year = this.displayDate.getFullYear();
@@ -689,7 +644,6 @@ class DoodhDaily {
     this.renderCalendar();
     this.updateMonthYearDisplay();
     
-    // Scroll to today's date if visible and highlight it
     setTimeout(() => {
       const todayCell = document.querySelector('.calendar-day.today');
       if (todayCell) {
@@ -701,7 +655,6 @@ class DoodhDaily {
     this.showToast('📅 Jumped to today', 'success');
   }
 
-  // Calculator functionality
   toggleCalculator() {
     const calc = document.getElementById('calculator');
     const calcBtn = document.getElementById('calculator-open');
@@ -817,7 +770,6 @@ class DoodhDaily {
     this.renderMonthSelector();
   }
 
-  // Enhanced calculation with streak
   calculateCosts() {
     const price1L = parseFloat(document.getElementById('price-1l')?.value) || 0;
     const price05L = parseFloat(document.getElementById('price-05l')?.value) || 0;
@@ -833,12 +785,10 @@ class DoodhDaily {
       return;
     }
 
-    // Save prices
     localStorage.setItem('doodhdaily-prices', JSON.stringify({
       price1L, price05L, quantity
     }));
 
-    // Calculate based on selected months
     let totalDays = 0;
 
     this.markedDates.forEach(dateStr => {
@@ -853,11 +803,8 @@ class DoodhDaily {
     const totalQuantity = totalDays * quantity;
     const pricePerUnit = quantity === 1 ? price1L : price05L;
     const totalCost = totalDays * pricePerUnit;
-
-    // Calculate current streak
     const currentStreak = this.calculateCurrentStreak();
 
-    // Display results
     const totalDaysEl = document.getElementById('total-days');
     const totalQuantityEl = document.getElementById('total-quantity');
     const totalCostEl = document.getElementById('total-cost');
@@ -872,7 +819,6 @@ class DoodhDaily {
     if (resultsSection) {
       resultsSection.classList.remove('hidden');
       
-      // Auto-scroll to results
       setTimeout(() => {
         resultsSection.scrollIntoView({ 
           behavior: 'smooth', 
@@ -884,7 +830,6 @@ class DoodhDaily {
     this.showToast('🧮 Calculation completed!', 'success');
   }
 
-  // Calculate current streak
   calculateCurrentStreak() {
     const today = new Date();
     let streak = 0;
@@ -903,7 +848,6 @@ class DoodhDaily {
     return streak;
   }
 
-  // Month/Year picker
   openMonthPicker() {
     const overlay = document.getElementById('picker-overlay');
     const yearSpan = document.getElementById('picker-year');
@@ -928,7 +872,6 @@ class DoodhDaily {
       btn.className = 'month-picker-btn';
       btn.textContent = this.months[i];
       
-      // Highlight current month
       if (i === this.displayDate.getMonth() && this.pickerYear === this.displayDate.getFullYear()) {
         btn.classList.add('current');
       }
@@ -954,7 +897,6 @@ class DoodhDaily {
     if (overlay) overlay.classList.add('hidden');
   }
 
-  // Notification settings
   loadNotificationSettings() {
     const saved = localStorage.getItem('doodhdaily-notifications');
     if (saved) {
@@ -996,11 +938,9 @@ class DoodhDaily {
       this.saveNotificationSettings();
       
       if (this.notificationSettings.enabled && !wasEnabled) {
-        // Just enabled - schedule next notification
         this.scheduleNextNotification();
         this.showToast('✅ Daily reminders enabled at 12:00 PM!', 'success');
       } else if (!this.notificationSettings.enabled && wasEnabled) {
-        // Just disabled - clear scheduled notifications
         localStorage.removeItem('doodhdaily-next-notification');
         this.showToast('❌ Daily reminders disabled', 'info');
       }
@@ -1009,7 +949,6 @@ class DoodhDaily {
     this.closeSettings();
   }
 
-  // Print functionality
   printResults() {
     const results = document.getElementById('calc-results');
     if (results && results.classList.contains('hidden')) {
@@ -1018,19 +957,14 @@ class DoodhDaily {
       return;
     }
 
-    // Add print class for styling
     document.body.classList.add('printing');
-    
-    // Trigger print
     window.print();
     
-    // Remove print class
     setTimeout(() => {
       document.body.classList.remove('printing');
     }, 1000);
   }
 
-  // Install prompt handling
   setupInstallPrompt() {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -1080,7 +1014,6 @@ class DoodhDaily {
     }
   }
 
-  // Enhanced event binding with double-click support
   bindEvents() {
     // Install buttons
     const installBtn = document.getElementById('install-btn');
@@ -1124,7 +1057,6 @@ class DoodhDaily {
         clickCount++;
         
         if (clickCount === 1) {
-          // Single click - toggle milk status
           setTimeout(() => {
             if (clickCount === 1) {
               this.toggleMilkPurchase();
@@ -1132,7 +1064,6 @@ class DoodhDaily {
             clickCount = 0;
           }, 300);
         } else if (clickCount === 2) {
-          // Double click - toggle and focus on notes
           this.toggleMilkPurchase();
           setTimeout(() => {
             const notesField = document.getElementById('day-notes');
@@ -1280,7 +1211,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Handle app visibility change for notifications
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && app) {
-    // App became visible, refresh if needed
     app.renderCalendar();
   }
 });

@@ -1,193 +1,59 @@
-# 🥛 DoodhDaily - Smart Milk Tracker
+# DoodhDaily – Simple Daily Milk Tracker
 
-A lightweight, senior-friendly Progressive Web App (PWA) to track daily milk purchases, calculate costs, and get daily reminder notifications — all offline and without Firebase Cloud Messaging.
+DoodhDaily is a lightweight and user-friendly web app designed to help you keep track of daily milk deliveries, calculate monthly costs, and receive gentle reminders. The app is designed for ease of use and works entirely offline once installed. It requires no login or internet connection after setup.
 
----
+## Features
 
-## ✨ Features
+### Calendar-Based Tracking
+- Tap any day on the calendar to mark it as a milk purchase day
+- Tap again to unmark the day
+- Add notes such as "Paid ₹300", "No delivery", or any other reminder
+- Festival days are automatically highlighted using Indian holiday data
 
-### 📅 Calendar Tracking
-- Tap any date to mark/unmark milk purchase
-- Add optional notes (e.g., "Paid ₹300", "No delivery")
-- ★ Highlights Indian holidays (via Calendarific)
-- 🧓 Large buttons, text, and icons for elderly usability
+### Monthly Cost Calculation
+- Supports 1-litre and 0.5-litre price tracking
+- Select specific months across different years
+- View total milk usage, cost, and active streaks
+- Print-ready cost summary available
 
-### 🧮 Cost Calculator
-- Calculates monthly milk cost
-- Select months across years
-- 1L or 0.5L milk pricing support
-- Print-friendly report view
+### Local Reminders (No Cloud)
+- A local notification is scheduled daily at 12:00 PM
+- Clicking the reminder opens the app's main page
+- No Firebase or external messaging services used
 
-### 🔔 Daily Reminder (No Firebase)
-- A local daily reminder at 12:00 PM
-- Uses browser Notifications API + Service Worker
-- No login or cloud needed
-- Clicking the reminder opens the app for manual entry
+### Offline-First Progressive Web App
+- Works without an internet connection after the first load
+- Optimized for mobile, tablet, and desktop
+- Can be installed as a standalone app
 
-### 📱 PWA Features
-- Install to home screen (Android, iOS, Desktop)
-- Works offline with service worker cache
-- Optimized for small screens and touch input
+### Senior-Friendly Design
+- Large buttons and readable fonts
+- Simple, focused layout
+- Clear visual feedback for all actions
+- Light and dark themes available
 
----
+## How to Use
 
-## 🚀 Quick Start
+### Marking Milk Days
+- Tap a date on the calendar to mark milk as purchased
+- Tap again to remove the mark
+- Long-press or tap again to add or update a note for that day
 
-### 1. Deploy Files
-Host all files using Netlify / Firebase Hosting / GitHub Pages:
-- `index.html`
-- `app.js`
-- `style.css`
-- `sw.js`
-- `manifest.json`
-- Icons (`icon-192.png`, `icon-512.png`, etc.)
+### Adding Notes
+- Notes help record payments, delivery issues, or personal messages
+- Each note is tied to a specific date
 
-### 2. Enable Local Notifications
-No Firebase needed! The app uses:
-- Notifications API (prompted on first visit)
-- `setInterval()` + Service Worker scheduling
-- Notification triggers once daily at 12:00 PM
+### Using the Cost Calculator
+- Enter current prices for milk (per litre or half litre)
+- Select months to include in the cost calculation
+- Click "Calculate" to see total days, quantity, and expense
 
----
+### Enabling Daily Reminders
+- Open the settings screen by clicking the settings icon
+- Turn on the "Daily Milk Reminder" option
+- A reminder will appear daily at 12:00 PM, opening the app when clicked
 
-## 📋 How to Use
+### Switching Themes
+- Toggle between light and dark themes for better visibility
 
-### ✅ Mark Milk Purchase
-1. Tap any calendar date
-2. Confirm "Did you buy milk?" → marks 🥛
-3. Optionally add a small note ("Paid ₹250")
-4. Re-tap to unmark or update
-
-### 🔔 Daily Notification
-- Notification at 12:00 PM daily
-- Clicking it opens the app
-- No buttons/actions — simple and reliable
-
-### ₹ Cost Calculator
-1. Tap `₹` icon
-2. Enter cost per litre
-3. Choose 1L or 0.5L
-4. Select months (can include previous years)
-5. View cost breakdown → print/save results
-
----
-
-## 👓 Senior-Friendly Design
-
-- 🅰️ Minimum font size: 18px
-- 🖲️ Large tap targets
-- 🌗 Dark/light mode toggle
-- 🎯 Clear iconography + feedback (✅, 🥛, ★)
-
----
-
-## 🧑‍💻 Technical Details
-
-### Browser Support
-- ✅ Chrome, Edge (Android/Desktop)
-- ✅ Safari (iOS)
-- ✅ Firefox (limited install prompt support)
-
-### Data Storage
-- `localStorage` → milk data, notes, settings
-- `IndexedDB` (optional) → fallback storage
-- Offline-capable via service worker
-
-### Notifications
-- ✅ One reminder/day using Notifications API
-- ❌ No push/Firebase required
-- ✅ Opens the app when clicked
-
----
-
-## 🔒 Privacy & Security
-
-- No personal data is collected
-- No login or sign-up needed
-- No internet required after first load
-- MIT licensed open-source
-
----
-
-## 📱 Installation Instructions
-
-### Android
-1. Open in Chrome
-2. Tap “Install DoodhDaily” button or “Add to Home Screen”
-3. Confirm → app will appear on home screen
-
-### iOS (Safari)
-1. Tap Share → “Add to Home Screen”
-2. App icon will appear and launch in full screen
-
-### Desktop
-1. Open app in Chrome or Edge
-2. Click install icon in address bar
-
----
-
-## 🔄 Updates
-
-1. Replace hosted files (e.g., via Netlify or Firebase Hosting)
-2. Update version in `sw.js` → `CACHE_NAME = 'v2'`
-3. Old cache will be cleared automatically
-
----
-
-## 📂 File Structure
-DoodhDaily/
-│
-├── index.html
-├── app.js
-├── style.css
-├── sw.js
-├── manifest.json
-├── icon-192.png
-├── icon-512.png
-├── Title.png
-└── image.png
-
-
-## ❓ Troubleshooting
-
-### No Notification?
-- Check if browser allowed notifications
-- Try reinstalling the app
-- Make sure your browser supports Notification API
-
-### App Not Installing?
-- Use Chrome/Edge (Android/Desktop)
-- On iOS, open in Safari and "Add to Home Screen"
-
-### Data Lost?
-- Avoid using private/incognito mode
-- Ensure `localStorage` is enabled
-- Data will persist across sessions
-
----
-
-## ✅ Summary
-
-| Feature         | Available     |
-|----------------|---------------|
-| Offline Support | ✅ Yes        |
-| Daily Reminder  | ✅ Local only |
-| Milk Tracker    | ✅ Calendar   |
-| Notes per day   | ✅ Yes        |
-| Cost Calculator | ✅ Yes        |
-| Firebase Needed | ❌ No         |
-| Print Logs      | ✅ Yes        |
-
----
-
-## 🆘 Support
-
-For help or suggestions:
-- Check browser console
-- Reload app
-- Contact developer if issues persist
-
----
-
-Built with ❤️ for families, seniors, and everyday users who want **simple and reliable milk tracking**.
-
+DoodhDaily is designed to make daily milk tracking effortless, especially for families and elders. It focuses on simplicity, clarity, and reliability.
